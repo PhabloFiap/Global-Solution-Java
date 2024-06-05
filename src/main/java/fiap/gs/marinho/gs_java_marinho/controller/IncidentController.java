@@ -79,6 +79,15 @@ public class IncidentController {
                 WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).listIncidents()).withRel("incidents")
         ));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Incident> patchIncident(@PathVariable Long id, @RequestBody Incident incident) {
+        Incident updatedIncident = incidentService.updateIncident(incident);
+        return ResponseEntity.ok(updatedIncident);
+    }
+
+
+
     @DeleteMapping("/{id}")
     //@ApiOperation(value = "Deletar incidente")
     public ResponseEntity<EntityModel<Incident>> deleteIncident(@PathVariable Long id){
