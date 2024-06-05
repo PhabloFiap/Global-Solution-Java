@@ -4,9 +4,14 @@ import fiap.gs.marinho.gs_java_marinho.entity.Incident;
 import fiap.gs.marinho.gs_java_marinho.entity.User;
 import fiap.gs.marinho.gs_java_marinho.repository.IncidentRepository;
 import fiap.gs.marinho.gs_java_marinho.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -49,9 +54,38 @@ public class IncidentService {
         return incidentRepository.save(incident);
     }
 
+    public Incident patchIncident(Long id, Map<String, Object> updates) {
+        Incident incident = incidentRepository.findById(id).orElseThrow(() -> new RuntimeException("Incident not found"));
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "Tipo":
+                    incident.setTipo((String) value);
+                    break;
+                case "Descricao":
+                    incident.setDescricao((String) value);
+                    break;
+                case "Lugar":
+                    incident.setLugar((String) value);
+                    break;
+                case "tempo":
+                incident.setTimestamp((LocalDateTime)value);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Opcao invalida: " + key);
+            }
+        });
+
+        return incidentRepository.save(incident);
+
+    }
+
+   }
+
 //
 //    public Optional<Incident> findIncident(String incident) {
 //        return incidentRepository.findByIncident(incident);
 //
 //    }
-}
+
