@@ -1,5 +1,6 @@
 package fiap.gs.marinho.gs_java_marinho.service;
 
+import fiap.gs.marinho.gs_java_marinho.entity.Incident;
 import fiap.gs.marinho.gs_java_marinho.entity.User;
 import fiap.gs.marinho.gs_java_marinho.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,13 @@ public class UserService {
 
     public Optional<User> getUserByUsuario(String usuario) {
         return userRepository.findByUsuario(usuario);
+    }
+
+    public Incident addIncidentToUser(Long userId, Incident incident) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.getIncidents().add(incident);
+        incident.setUsuario(user);
+        userRepository.save(user);
+        return incident;
     }
 }

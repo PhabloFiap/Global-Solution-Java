@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/incidents")
+@RequestMapping("/api/incidents")
 //@Api(tags = "Incident")
 public class IncidentController {
 
@@ -62,10 +62,10 @@ public class IncidentController {
 //    }
     @PostMapping
    // @ApiOperation(value = "Criar incidente")
-    public ResponseEntity<EntityModel<Incident>>createIncident(@RequestBody Incident incident){
-        List<Incident> incidents = incidentService.createIncident(incident);
-        return ResponseEntity.ok().body(EntityModel.of(incident,
-                WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).findbyIncident(incident.getId())).withSelfRel(),
+    public ResponseEntity<EntityModel<Incident>> createIncident(@RequestParam Long userId, @RequestBody Incident incident){
+        Incident createdIncident = incidentService.createIncident(userId, incident);
+        return ResponseEntity.ok().body(EntityModel.of(createdIncident,
+                WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).findbyIncident(createdIncident.getId())).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).listIncidents()).withRel("incidents")
         ));
     }
@@ -73,7 +73,7 @@ public class IncidentController {
     @PutMapping
  //   @ApiOperation(value = "Atualizar incidente")
     public ResponseEntity<EntityModel<Incident>>updateIncident(@RequestBody Incident incident){
-        List<Incident> incidents = incidentService.updateIncident(incident);
+        Incident incidents = incidentService.updateIncident(incident);
         return ResponseEntity.ok().body(EntityModel.of(incident,
                 WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).findbyIncident(incident.getId())).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(methodOn(IncidentController.class).listIncidents()).withRel("incidents")

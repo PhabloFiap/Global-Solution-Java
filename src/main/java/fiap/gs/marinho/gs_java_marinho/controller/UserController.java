@@ -1,5 +1,6 @@
 package fiap.gs.marinho.gs_java_marinho.controller;
 
+import fiap.gs.marinho.gs_java_marinho.entity.Incident;
 import fiap.gs.marinho.gs_java_marinho.entity.User;
 import fiap.gs.marinho.gs_java_marinho.service.UserService;
 //import io.swagger.annotations.Api;
@@ -80,6 +81,15 @@ public class UserController {
         resource.add(WebMvcLinkBuilder.linkTo(methodOn(UserController.class).listUser()).withRel("users"));
         return ResponseEntity.ok(resource);
     }
+
+    @PostMapping("/{userId}/incidents")
+    public ResponseEntity<Incident> createIncident(@PathVariable Long userId, @RequestBody Incident incident) {
+        Incident createdIncident = userService.addIncidentToUser(userId, incident);
+        return ResponseEntity.ok(createdIncident);
+    }
+
+
+
 
     @PutMapping
 //    @ApiOperation(value = "Atualizar usuário")
