@@ -1,5 +1,6 @@
 package fiap.gs.marinho.gs_java_marinho.controller;
 
+import fiap.gs.marinho.gs_java_marinho.entity.Incident;
 import fiap.gs.marinho.gs_java_marinho.entity.User;
 import fiap.gs.marinho.gs_java_marinho.service.UserService;
 //import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -81,6 +83,15 @@ public class UserController {
         return ResponseEntity.ok(resource);
     }
 
+    @PostMapping("/{userId}/incidents")
+    public ResponseEntity<Incident> createIncident(@PathVariable Long userId, @RequestBody Incident incident) {
+        Incident createdIncident = userService.addIncidentToUser(userId, incident);
+        return ResponseEntity.ok(createdIncident);
+    }
+
+
+
+
     @PutMapping
 //    @ApiOperation(value = "Atualizar usuário")
     public ResponseEntity<EntityModel<User>> updateUser(@RequestBody User user) {
@@ -90,6 +101,14 @@ public class UserController {
         resource.add(WebMvcLinkBuilder.linkTo(methodOn(UserController.class).listUser()).withRel("users"));
         return ResponseEntity.ok(resource);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> patchUser(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        User patchedUser = userService.patchUser(id, updates);
+        return ResponseEntity.ok(patchedUser);
+    }
+
+
     @DeleteMapping("/{id}")
 //    @ApiOperation(value = "Deletar usuário")
     public ResponseEntity<List<EntityModel<User>>> deleteUser(@PathVariable Long id) {

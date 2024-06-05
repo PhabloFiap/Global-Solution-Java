@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class User {
 
@@ -31,7 +32,7 @@ public class User {
     @Column(name="role", nullable = false) //role: O papel do usuário no sistema (por exemplo, Admin, Researcher, Public).
     private String role;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("usuario")
     private List<Incident> incidents = new ArrayList<>();
 //    private Set<Incident> incidents = new HashSet<>();
